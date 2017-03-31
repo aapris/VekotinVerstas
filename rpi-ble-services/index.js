@@ -1,15 +1,16 @@
 var bleno = require('bleno');
 
 // var SystemInformationService = require('./systeminformationservice');
-var DummyService = require('./dummyservice');
+// var DummyService = require('./dummyservice');
+var ParticulateService = require('./particulateservice');
 
-var dummyService = new DummyService();
+var particulateService = new ParticulateService();
 var deviceName = 'rpi-air-henri'
 
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
     if (state === 'poweredOn') {
-        bleno.startAdvertising(deviceName, [dummyService.uuid]);
+        bleno.startAdvertising(deviceName, [particulateService.uuid]);
     }
     else {
         console.log('state changed to other than poweredOn, stopping advertising');
@@ -25,7 +26,7 @@ bleno.on('advertisingStart', function(error) {
 
     if (!error) {
         bleno.setServices([
-            dummyService
+            particulateService
         ]);
     }
 });
