@@ -5,7 +5,7 @@ var bleno = require('bleno');
 var ParticulateService = require('./particulateservice');
 
 var particulateService = new ParticulateService();
-var deviceName = 'rpi-air-henri'
+var deviceName = 'rpi-airquality-box'
 
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
