@@ -13,17 +13,10 @@ Run service: `npm start`
 
 2. Use [Etcher](http://www.etcher.io) to flash the image to disk (or `dd` why not)
 
-3. Add a known network to the wpa_supplicant.conf file:
-`sudoedit /media/user/uuid/etc/wpa_supplicant/wpa_supplicant.conf`.
-Inside, add:
-```
-network={
-    ssid="VekotinVerstas"
-    psk="sharedatahere"
-}
-```
+3. Add a known network to the wpa_supplicant.conf file so you can connect via SSH:
+`ẁpa_passphrase SSID PASSWORD >> /media/USER/UUID/etc/wpa_supplicant/wpa_supplicant.conf`
 
-4. Enable SSH on the system by adding an empty filed named "SSH" into the boot partition: `touch /media/user/boot/SSH`. Pop the SD-card into the Raspberry Pi, power it up, and join the same Wifi network, `ssh pi@raspberrypi.local`. Consider changing the password for the `pi` user.
+4. Enable SSH on the system by adding an empty filed named "SSH" into the boot partition: `touch /media/USER/boot/SSH`. Pop the SD-card into the Raspberry Pi, power it up, and join the same Wifi network, `ssh pi@raspberrypi.local`. Consider changing the password for the `pi` user.
 
 5. On the Pi, do
 ```
