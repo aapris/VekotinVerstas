@@ -17,7 +17,7 @@ function getRpiSerial(){
     return serial[1].slice(1);
 }
 var serialNo = getRpiSerial();
-var deviceName = 'rpi-air-' + serialNo;
+var deviceName = 'rpi-air-' + serialNo.slice(-6);
 
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
