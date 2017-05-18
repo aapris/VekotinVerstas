@@ -43,3 +43,9 @@ bleno.on('advertisingStart', function(error) {
         ]);
     }
 });
+
+// problems with disconnecting, so we want to let pm2 take care of restarting on disconnect
+bleno.on('disconnect', function(clientAddress) {
+    console.log(clientAddress);
+    process.exit(0)
+})
