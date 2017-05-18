@@ -6,7 +6,18 @@ var ParticulateService = require('./particulateservice');
 
 var systemInfoService = new SystemInformationService();
 var particulateService = new ParticulateService();
-var deviceName = 'rpi-airquality-box'
+
+// https://raspberrypi.stackexchange.com/a/53800
+function getRpiSerial(){
+    var fs = require('fs');
+    var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
+    var cont_array = content.split("\n");
+    var serial_line = cont_array[cont_array.length-2];
+    var serial = serial_line.split(":");
+    return serial[1].slice(1);
+}
+var serialNo = getRpiSerial();
+var deviceName = 'rpi-air-' + serialNo;
 
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
