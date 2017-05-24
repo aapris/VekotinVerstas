@@ -12,6 +12,12 @@ var ParticulateCharacteristic = function() {
         // uuid: 'ff51b30e-d7e2-4d93-8842-a7c4a57dfb10',
         uuid: '9ece1216-4ae7-4ff2-8600-cb9c7a46c1be',
         properties: ['read', 'notify'],
+        descriptors: [
+            new bleno.Descriptor({
+                uuid: '2901',
+                value: 'Nofity message: "PM2.5;PM10" (ug/m2)'
+            })
+        ]
     });
 
     this._value = new Buffer(0);
@@ -35,7 +41,7 @@ ParticulateCharacteristic.prototype.onReadRequest = function(offset, callback) {
 };
 
 ParticulateCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-    console.log('A client subscribed to particulate notify!')
+    console.log('A client subscribed to particulate notify with maxValueSize ' + String(maxValueSize));
 
     function reduceCircBuffer(sensor, cb) {
         return function() {
