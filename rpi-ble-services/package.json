@@ -1,5 +1,5 @@
 {
-  "name": "rpi3-application",
+  "name": "rpi-ble-services",
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {},
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sudo node index.js"
   },
-  "author": "Andreas Lundquist",
+  "author": "Henri Kotkanen",
   "license": "Apache-2.0",
   "dependencies": {
     "bleno": "^0.3.5",

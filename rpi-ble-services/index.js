@@ -1,11 +1,12 @@
 var bleno = require('bleno');
 
-// var SystemInformationService = require('./systeminformationservice');
+var SystemInformationService = require('./systeminformationservice');
 // var DummyService = require('./dummyservice');
 var ParticulateService = require('./particulateservice');
 
+var systemInfoService = new SystemInformationService();
 var particulateService = new ParticulateService();
-var deviceName = 'rpi-air-henri'
+var deviceName = 'rpi-airquality-box'
 
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
@@ -26,7 +27,8 @@ bleno.on('advertisingStart', function(error) {
 
     if (!error) {
         bleno.setServices([
-            particulateService
+            particulateService,
+            systemInfoService
         ]);
     }
 });
