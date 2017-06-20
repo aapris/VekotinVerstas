@@ -4,7 +4,7 @@ var util = require('util');
 var fs = require('fs');
 var Promise = require('bluebird');
 
-var CharacteristicFromConfig = Promise.promisify(require('makeCharacteristic'));
+var CharacteristicFromConfig = Promise.promisify(require('./makeCharacteristic'));
 
 function ServiceFromConfig(confFilePath, broker) {
 
