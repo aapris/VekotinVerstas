@@ -3,11 +3,6 @@
 Sets up a BLE service that provides air quality sensor data as characteristics. Reads an sds011 particulate sensor over USB serial.
 
 ## Usage
-### In an already running system
-Install dependencies: `npm install`. This will take a loong time on the RPi Zero W.
-
-Run service: `npm start`
-
 ### From scratch (empty SD card)
 1. Start with latest [Raspbian image](https://downloads.raspberrypi.org/raspbian_lite_latest)
 
@@ -34,6 +29,12 @@ tar -xvf node-v6.10.3-linux-armv6l.tar.xz
 sudo cp -r node-v6.10.3-linux-armv6l/{bin,include,lib,share} /usr/local
 rm -rf node-v6.10.3-linux-armv6l
 ```
+
+7. Install Redis: `sudo apt-get install redis-server` It will be used by the local MQTT broker, which decouples the sensors from the BLE service app.
+
+7. Install dependencies: `npm install`. This will take a loong time on the RPi Zero W.
+
+Run service: `npm start`
 
 ### Run the BLE service always (at startup)
 

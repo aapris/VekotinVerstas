@@ -1,8 +1,7 @@
 var bleno = require('bleno');
 var makeBroker = require('./sensors/broker');
 var fs = require('fs');
-var Promise = require('bluebird');
-var serviceMaker = Promise.promisify(require('./makeService'));
+var GenericService = require('./makeService');
 
 // Serial number for naming our box
 // https://raspberrypi.stackexchange.com/a/53800
@@ -22,39 +21,48 @@ var broker = makeBroker(); //MQTT broker to read for incoming sensor data
 const SERVICE_CONF_PATH = '/etc/rpi-ble-services/';
 var files = fs.readdirSync(SERVICE_CONF_PATH);
 
+// Start creating services and save their promises
 var services = [];
 for (i in files) {
-    serviceMaker(files[i], broker);
+    // console.log('starting to create a service: ', files[i]);
+    var service = new GenericService(SERVICE_CONF_PATH + files[i], broker);
+    services.push(service);
 }
 
-Promise.all(services).then(function(services) {
-    console.log('services have all been created. here is the first one: ' + services[0]);
-    var serviceUUIDs = services.map(function (s) { return s.uuid; })
+// Now that all services have hopefully been created, start advertising and set services
+// console.log('services have all been created. here is the first one: ' + services[0]);
+console.log('bleno state == ' + bleno.state);
 
-    bleno.on('stateChange', function(state) {
-        console.log('on -> stateChange: ' + state);
-        if (state === 'poweredOn') {
-            bleno.startAdvertising(deviceName, serviceUUIDs);
-        }
-        else {
-            console.log('state changed to other than poweredOn, stopping advertising');
-            bleno.stopAdvertising();
-        }
-    });
+var serviceUUIDs = services.map(function (s) { return s.uuid; })
 
-    bleno.on('advertisingStart', function(error) {
-        console.log('on -> advertisingStart: ' +
-            (error ? 'error ' + error : 'success')
-        );
-
-        if (!error) {
-            bleno.setServices(services);
-        }
-    });
-
-    // problems with disconnecting, so we want to let pm2 take care of restarting on disconnect
-    bleno.on('disconnect', function(clientAddress) {
-        console.log('Client ' + clientAddress + ' disconnected! Exiting for restart.');
-        process.exit(0)
-    })
+// INIT BLENO by subscribing to an adapter state change
+// ...also attach callbacks for disconnections and advertising errors
+bleno.on('stateChange', function(state) {
+    console.log('on -> stateChange: ' + state);
+    if (state === 'poweredOn') {
+        bleno.startAdvertising(deviceName, serviceUUIDs);
+    }
+    else {
+        console.log('state changed to other than poweredOn, stopping advertising');
+        bleno.stopAdvertising();
+    }
 });
+
+bleno.on('advertisingStart', function(error) {
+    if (!error) {
+        console.log('services are set');
+        bleno.setServices(services);
+    }
+});
+
+bleno.on('advertisingStartError', function(error) {
+    console.log('Error starting advertising: ' + error);
+    console.log('Restarting.');
+    process.exit(0);
+});
+
+// problems with disconnecting, so we want to let pm2 take care of restarting on disconnect
+bleno.on('disconnect', function(clientAddress) {
+    console.log('Client ' + clientAddress + ' disconnected! Exiting for restart.');
+    process.exit(0);
+})
