@@ -1,0 +1,7 @@
+PyYAML==3.12
+docopt==0.6.2
+hbmqtt==0.9
+passlib==1.7.1
+pyserial==3.3
+transitions==0.2.5
+websockets==3.3
