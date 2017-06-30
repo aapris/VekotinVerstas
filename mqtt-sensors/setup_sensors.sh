@@ -4,13 +4,16 @@
 sudo apt-get install -y supervisor
 
 # Make GATT service/char conf files available for bleno app
+sudo mkdir -vp /etc/rpi-ble-services/
 for f in *.json
 do
    sudo cp -v "$f" /etc/rpi-ble-services/"$f"
 done
 
 # Overwrite supervisord to start monitoring our scripts
-sudo cp -v supervisord.conf.example /home/pi/tmp/supervisord.conf
+sudo cp -vi sds011.conf.example /etc/supervisor/conf.d/sds011.conf
 
 # Restart supervisord with new config
-sudo service supervisod restart
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl status

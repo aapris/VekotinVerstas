@@ -1,0 +1,2 @@
+[program:sds011]
+command=/home/pi/VekotinVerstas/mqtt-sensors/env/bin/python /home/pi/VekotinVerstas/mqtt-sensors/sds011.py /dev/ttyUSB0
