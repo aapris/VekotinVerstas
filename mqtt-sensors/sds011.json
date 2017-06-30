@@ -1,0 +1,22 @@
+{
+    "name": "particulates",
+    "UUID": "0d52fc21-90ae-400f-b630-8e17630367c2",
+    "characteristics": [
+        {
+            "name": "PM2.5",
+            "descriptorText": "PM2.5, ug/m^3",
+            "descriptorUUID": "2901",
+            "UUID": "00000025-947d-41ef-a73e-73acf7a0de14",
+            "properties": ["notify", "read"],
+            "topic": "PM25"
+        },
+        {
+            "name": "PM10",
+            "descriptorText": "PM10, ug/m^3",
+            "descriptorUUID": "2901",
+            "UUID": "00000010-947d-41ef-a73e-73acf7a0de14",
+            "properties": ["notify", "read"],
+            "topic": "PM10"
+        }
+    ]
+}
