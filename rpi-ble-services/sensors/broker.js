@@ -27,7 +27,7 @@ function makeMQTTBroker() {
     server.on('ready', setup);
 
     server.on('clientConnected', function(client) {
-        console.log('client connected', client.id);
+        console.log('sensor mqtt-client connected', client.id);
     });
 
     return server;

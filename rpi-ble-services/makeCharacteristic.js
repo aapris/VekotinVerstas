@@ -23,7 +23,7 @@ var MakeCharacteristic = function(opts, broker) {
             this._value = packet.payload;
             // when no one is listening to notify updates, this._updateValueCb == null
             if (typeof(this._updateValueCb) === typeof(Function)) {
-                console.log('calling updateValueCallback');
+                // console.log('calling updateValueCallback');
                 this._updateValueCb(this._value);
             }
         }
