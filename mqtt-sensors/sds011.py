@@ -7,30 +7,13 @@ check sleep command from here!
 
 import serial
 import struct
-import asyncio
 import sys
 import logging
-from hbmqtt.client import MQTTClient, ConnectException
+import paho.mqtt.client as mqtt
 
 PM25_TOPIC = '/PM25'
 PM10_TOPIC = '/PM10'
 BUFFER_LEN = 10
-
-
-@asyncio.coroutine
-def publish(topic, avg):
-    try:
-        C = MQTTClient()
-        ret = yield from C.connect('mqtt://localhost:1883/')
-        payload = '{}'.format(avg).encode('ascii') #need byte string to publish
-        message = yield from C.publish(topic, payload)
-        logging.info("message {} to topic {} published".format(payload, topic))
-        # print("message {} to topic {} published".format(payload, topic))
-        yield from C.disconnect()
-    except ConnectException as ce:
-        logging.error("Connection failed: {}".format(ce))
-        # print("Connection failed: {}".format(ce))
-    yield None
 
 
 class Sds011Reader:
@@ -53,7 +36,6 @@ class Sds011Reader:
         ok = checksum == r[2] and r[3] == 0xab
         return pm25, pm10, ok
 
-    @asyncio.coroutine
     def read_forever(self):
         while True:
             while self.byte != b"\xaa":
@@ -66,17 +48,25 @@ class Sds011Reader:
                 yield pm25, pm10, ok
 
 
-@asyncio.coroutine
-def measure(sds011, buffer_len):
+def main(port):
     # READ SENSOR FOREVER, ALWAYS APPEND NEW VAL TO BUFFER WHILE DROPPING THE OLDEST
     # PUBLISH TO MQTT PERIODICALLY THE AVG OF THAT BUFFER
+
+    sds011 = Sds011Reader(port)
+
+    mqttc = mqtt.Client()
+    try:
+        mqttc.connect("localhost")
+    except Exception as e:
+        logging.error("Failed to open serial port. {}".format(e))
+        sys.exit(1)
+    mqttc.loop_start()
 
     pm25_buffer = []
     pm10_buffer = []
 
-
     for pm25, pm10, ok in sds011.read_forever():
-        print(u"PM 2.5: {} μg/m^3  PM 10: {} μg/m^3 CRC={}".format(pm25, pm10, "OK" if ok else "NOK"))
+        # print(u"PM 2.5: {} μg/m^3  PM 10: {} μg/m^3 CRC={}".format(pm25, pm10, "OK" if ok else "NOK"))
 
         if not ok:
             continue
@@ -84,31 +74,26 @@ def measure(sds011, buffer_len):
         pm25_buffer.append(pm25)
         pm10_buffer.append(pm10)
 
-        if len(pm25_buffer) >= buffer_len:
+        if len(pm25_buffer) >= BUFFER_LEN:
             # print(buffer_len)
             pm25avg = float(sum(pm25_buffer)) / len(pm25_buffer)
-            yield from publish(PM25_TOPIC, pm25avg)
+            mqttc.publish(PM25_TOPIC, pm25avg)
+            logging.info("message {} to topic {} published".format(pm25avg, PM25_TOPIC))
             pm25_buffer = []
 
-        if len(pm10_buffer) >= buffer_len:
+        if len(pm10_buffer) >= BUFFER_LEN:
             # print(pm10_buffer)
             pm10avg = float(sum(pm10_buffer)) / len(pm10_buffer)
-            yield from publish(PM10_TOPIC, pm10avg)
+            mqttc.publish(PM10_TOPIC, pm10avg)
+            logging.info("message {} to topic {} published".format(pm10avg, PM10_TOPIC))
             pm10_buffer = []
-
-
-def main(port):
-    sds011 = Sds011Reader(port)
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(measure(sds011, BUFFER_LEN))
-    loop.run_forever()
 
 
 if __name__ == "__main__":
     formatter = "[%(asctime)s] %(name)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s"
-    logging.getLogger('asyncio')
+    # logging.getLogger('asyncio')
     logging.basicConfig(filename='sds011.log', level=logging.INFO, format=formatter)
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:
         print("Run me:\n    python {} /dev/ttyUSB0".format(sys.argv[0]))
         sys.exit(1)
     main(sys.argv[1])

@@ -40,7 +40,9 @@ var serviceUUIDs = services.map(function (s) { return s.uuid; })
 bleno.on('stateChange', function(state) {
     console.log('on -> stateChange: ' + state);
     if (state === 'poweredOn') {
-        bleno.startAdvertising(deviceName, serviceUUIDs);
+        // console.log(deviceName, serviceUUIDs)
+        // bleno.startAdvertising(deviceName, serviceUUIDs);
+        bleno.startAdvertising(deviceName);
     }
     else {
         console.log('state changed to other than poweredOn, stopping advertising');
