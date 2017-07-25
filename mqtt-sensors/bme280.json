@@ -1,0 +1,30 @@
+{
+    "name": "bme280",
+    "UUID": "0000181A-0000-1000-8000-00805F9B34FB",
+    "characteristics": [
+        {
+            "name": "temperature",
+            "descriptorText": "Celsius",
+            "descriptorUUID": "2901",
+            "UUID": "00002A6E-0000-1000-8000-00805F9B34FB",
+            "properties": ["notify", "read"],
+            "topic": "temperature"
+        },
+        {
+            "name": "humidity",
+            "descriptorText": "Percent, relative",
+            "descriptorUUID": "2901",
+            "UUID": "00002A6F-0000-1000-8000-00805F9B34FB",
+            "properties": ["notify", "read"],
+            "topic": "humidity"
+        },
+        {
+            "name": "pressure",
+            "descriptorText": "mbar/hPa",
+            "descriptorUUID": "2901",
+            "UUID": "00002A6D-0000-1000-8000-00805F9B34FB",
+            "properties": ["notify", "read"],
+            "topic": "pressure"
+        },
+    ]
+}

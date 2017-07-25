@@ -58,7 +58,7 @@ def main(port):
     try:
         mqttc.connect("localhost")
     except Exception as e:
-        logging.error("Failed to open serial port. {}".format(e))
+        logging.error("sds011 reader failed to open mqtt connection. {}".format(e))
         sys.exit(1)
     mqttc.loop_start()
 

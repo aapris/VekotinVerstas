@@ -13,3 +13,4 @@ sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl status
 ```
+**NB** For the bme280 sensor to work, additional steps (enabling the i2c interface) might be needed. Details in [bme280.md](bme280.md)

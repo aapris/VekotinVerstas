@@ -12,6 +12,7 @@ done
 
 # Overwrite supervisord to start monitoring our scripts
 sudo cp -vi sds011.conf.example /etc/supervisor/conf.d/sds011.conf
+sudo cp -vi bme280.conf.example /etc/supervisor/conf.d/bme280.conf
 
 # Restart supervisord with new config
 sudo supervisorctl reread
