@@ -11,9 +11,9 @@ import logging
 import paho.mqtt.client as mqtt
 
 
-TEMPERATURE_TOPIC = 'temperature'
-HUMIDITY_TOPIC = 'humidity'
-PRESSURE_TOPIC = 'pressure'
+TEMPERATURE_TOPIC = '/temperature'
+HUMIDITY_TOPIC = '/humidity'
+PRESSURE_TOPIC = '/pressure'
 
 
 class Bme280Reader:
