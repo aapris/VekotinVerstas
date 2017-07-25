@@ -1,2 +1,2 @@
 [program:bme280]
-command=/home/pi/VekotinVerstas/mqtt-sensors/env/bin/python /home/pi/VekotinVerstas/mqtt-sensors/bme280.py
+command=sudo /home/pi/VekotinVerstas/mqtt-sensors/env/bin/python /home/pi/VekotinVerstas/mqtt-sensors/bme280.py
