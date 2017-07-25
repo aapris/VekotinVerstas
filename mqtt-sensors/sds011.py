@@ -92,7 +92,7 @@ def main(port):
 if __name__ == "__main__":
     formatter = "[%(asctime)s] %(name)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s"
     # logging.getLogger('asyncio')
-    logging.basicConfig(filename='sds011.log', level=logging.INFO, format=formatter)
+    logging.basicConfig(filename='/home/pi/sds011.log', level=logging.INFO, format=formatter)
     if len(sys.argv) < 2:
         print("Run me:\n    python {} /dev/ttyUSB0".format(sys.argv[0]))
         sys.exit(1)

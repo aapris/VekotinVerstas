@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
+
 # Full credit to https://github.com/IDCFChannel/bme280-meshblu-py,
 # where most of Bme280Reader is copied from.
-
-#coding: utf-8
 
 import smbus
 import time
@@ -181,7 +181,7 @@ def main():
 
 if __name__ == '__main__':
     formatter = "[%(asctime)s] %(name)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s"
-    logging.basicConfig(filename='bme280.log', level=logging.INFO, format=formatter)
+    logging.basicConfig(filename='/home/pi/bme280.log', level=logging.INFO, format=formatter)
     main()
 
     # try:
